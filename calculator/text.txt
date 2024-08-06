@@ -1,0 +1,4 @@
+- 1 tìn template calculator
+- 2 chính sửa cơ bản phần giao diện
+- 3 tim hiểu về bài toán 
+- 4 hoàn thiên giao diện 

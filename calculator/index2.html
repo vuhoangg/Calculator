@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <style>
+        .calculator {
+            width: 200px;
+            margin: 100px auto;
+            padding: 10px;
+            color: #000;
+            background-color: #51505035;
+            border: 1px solid #000;
+            border-radius: 5px;
+            text-align: center;
+            /* background-color: #f0f0f0; */
+        }
+        .display {
+            width: 180px;
+            height: 40px;
+            background-color:#f0f0f0;
+            margin-bottom: 10px;
+            text-align: right;
+            font-size: 18px;
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #3d3d3d;
+        }
+        .list_item{
+            display: flex;
+
+        }
+        .button{
+            flex: 23%;
+        }
+        .button {
+            width: 40px;
+            height: 40px;
+            margin: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <div id="display" class="display">0</div>
+        <div class="list_item">
+            <button class="button" onclick="clearDisplay()">AC</button>
+            <button class="button" onclick="toggleSign()">+/-</button>
+            <button class="button" onclick="calculatePercentage()">%</button>
+            <button class="button" onclick="appendOperator('/')">÷</button>
+        </div>
+        <div class="list_item">
+            <button class="button" onclick="appendNumber('7')">7</button>
+            <button class="button" onclick="appendNumber('8')">8</button>
+            <button class="button" onclick="appendNumber('9')">9</button>
+            <button class="button" onclick="appendOperator('*')">×</button>
+        </div>
+        <div class="list_item">
+            <button class="button" onclick="appendNumber('4')">4</button>
+            <button class="button" onclick="appendNumber('5')">5</button>
+            <button class="button" onclick="appendNumber('6')">6</button>
+            <button class="button" onclick="appendOperator('-')">−</button>
+        </div>
+        <div class="list_item">
+            <button class="button" onclick="appendNumber('1')">1</button>
+            <button class="button" onclick="appendNumber('2')">2</button>
+            <button class="button" onclick="appendNumber('3')">3</button>
+            <button class="button" onclick="appendOperator('+')">+</button>
+        </div>
+        <div class="list_item">
+            <button class="button" onclick="appendNumber('0')">0</button>
+            <button class="button" onclick="appendDot()">.</button>
+            <button class="button" onclick="calculateResult()">=</button>
+        </div>
+    </div>
+
+    <script>
+    let currentValue = '0';
+    let operator = null;
+    let previousValue = null;
+    let shouldResetScreen = false;
+
+    function updateDisplay() {
+        document.getElementById('display').textContent = currentValue;
+    }
+
+    function clearDisplay() {
+        currentValue = '0';
+        operator = null;
+        previousValue = null;
+        shouldResetScreen = false;
+        updateDisplay();
+    }
+
+    function appendNumber(number) {
+        if (currentValue === '0' || shouldResetScreen) {
+            currentValue = number;
+            shouldResetScreen = false;
+        } else {
+            currentValue += number;
+        }
+        updateDisplay();
+    }
+
+    function appendDot() {
+        if (!currentValue.includes('.')) {
+            currentValue += '.';
+        }
+        updateDisplay();
+    }
+
+    function toggleSign() {
+    if (currentValue !== '0') {
+        let numberValue = parseFloat(currentValue);
+        if (numberValue > 0) {
+            currentValue = '-' + currentValue;
+        } else if (numberValue < 0) {
+           
+            currentValue = currentValue.slice(1);
+        }
+    }
+    updateDisplay();
+}
+
+
+    function calculatePercentage() {
+        currentValue = (parseFloat(currentValue) / 100).toString();
+        updateDisplay();
+    }
+
+    function appendOperator(op) {
+        if (operator !== null) {
+            calculateResult();
+        }
+        operator = op;
+        previousValue = currentValue;
+        shouldResetScreen = true;
+    }
+
+    function calculateResult() {
+        if (operator === null || shouldResetScreen) return;
+
+        let result;
+        const prev = parseFloat(previousValue);
+        const curr = parseFloat(currentValue);
+
+        if (isNaN(prev) || isNaN(curr)) return;
+
+        switch (operator) {
+            case '+':
+                result = prev + curr;
+                break;
+            case '-':
+                result = prev - curr;
+                break;
+            case '*':
+                result = prev * curr;
+                break;
+            case '/':
+                result = prev / curr;
+                break;
+            default:
+                return;
+        }
+
+        currentValue = result.toString();
+        operator = null;
+        previousValue = null;
+        updateDisplay();
+    }
+
+
+
+    </script>
+</body>
+</html>
